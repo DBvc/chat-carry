@@ -1,0 +1,45 @@
+{
+  "name": "chatcarry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal AI chat exporter. ChatGPT first; more platforms next.",
+  "type": "module",
+  "scripts": {
+    "bootstrap": "node tools/bootstrap.mjs",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --type-aware --deny-warnings",
+    "lint:fix": "oxlint --type-aware --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:foundation": "vitest run tests/foundation",
+    "test:foundation:e2e": "playwright test --project=foundation",
+    "test:e2e": "playwright test --project=business",
+    "check:foundation": "pnpm check:kit && pnpm check:boundaries && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:foundation && pnpm build && pnpm test:foundation:e2e",
+    "check": "pnpm check:kit && pnpm check:boundaries && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:foundation:e2e && pnpm test:e2e",
+    "package": "node tools/package.mjs",
+    "check:boundaries": "node tools/check-boundaries.mjs",
+    "check:kit": "node tools/verify-kit.mjs"
+  },
+  "dependencies": {
+    "marked": "18.0.14"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/chrome": "0.3.4",
+    "@types/node": "24.19.1",
+    "oxfmt": "0.71.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2003",
+    "typescript": "7.0.2",
+    "vite": "8.3.2",
+    "vitest": "5.0.3"
+  },
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
+  "packageManager": "pnpm@12.9.1"
+}

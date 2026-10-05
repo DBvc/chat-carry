@@ -1,0 +1,24 @@
+# 渲染样例
+
+## 你
+
+保留 a_b、# 标记和 * 星号。
+
+## ChatGPT
+
+# 结论
+
+用 **Vite** 和 *TypeScript*。
+
+```ts
+const path = "a_b";
+  console.log(path);
+```
+
+[文档](https://vite.dev/)
+
+| 名称 | 值 |
+| --- | --- |
+| A | 1 |
+
+公式：$x^2$。

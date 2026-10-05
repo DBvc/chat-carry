@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": true,
+  "ignorePatterns": [
+    "node_modules/**",
+    "dist/**",
+    "dist-test/**",
+    "release/**",
+    "tests/fixtures/**",
+    "ui/**",
+    "playwright-report/**",
+    "test-results/**",
+    "docs/toolchain-resolved.json"
+  ]
+}

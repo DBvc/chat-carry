@@ -1,0 +1,6924 @@
+[
+  {
+    "name": "basic",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "user-1",
+          "assistant-1"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "user-1",
+        "assistant-1"
+      ]
+    }
+  },
+  {
+    "name": "rich-text",
+    "capture": {
+      "payload": {
+        "title": "渲染样例",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "rich-user",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留 a_b、# 标记和 * 星号。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "rich-assistant",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "# 结论\n\n用 **Vite** 和 *TypeScript*。\n\n```ts\nconst path = \"a_b\";\n  console.log(path);\n```\n\n[文档](https://vite.dev/)\n\n| 名称 | 值 |\n| --- | --- |\n| A | 1 |\n\n公式：$x^2$。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "rich-user",
+          "rich-assistant"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "rich-user",
+        "rich-assistant"
+      ]
+    }
+  },
+  {
+    "name": "repeated-text-is-not-duplicate",
+    "capture": {
+      "payload": {
+        "title": "重复消息",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-4",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "repeat-u1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "继续"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [
+              "node-3"
+            ],
+            "message": {
+              "id": "repeat-a1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第一段"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-3": {
+            "id": "node-3",
+            "parent": "node-2",
+            "children": [
+              "node-4"
+            ],
+            "message": {
+              "id": "repeat-u2",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "继续"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-4": {
+            "id": "node-4",
+            "parent": "node-3",
+            "children": [],
+            "message": {
+              "id": "repeat-a2",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第二段"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "repeat-u2",
+          "repeat-a2"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "repeat-u1",
+        "repeat-a1",
+        "repeat-u2",
+        "repeat-a2"
+      ]
+    }
+  },
+  {
+    "name": "selected-branch",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-alt",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2",
+              "node-alt"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-alt": {
+            "id": "node-alt",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-alt",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "这是选择的第二版。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "user-1",
+          "assistant-alt"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "user-1",
+        "assistant-alt"
+      ]
+    }
+  },
+  {
+    "name": "branch-conflict",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-alt",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2",
+              "node-alt"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-alt": {
+            "id": "node-alt",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-alt",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "这是选择的第二版。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "assistant-1"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "BRANCH_MISMATCH"
+    }
+  },
+  {
+    "name": "cycle",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "node-2",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "INVALID_DATA"
+    }
+  },
+  {
+    "name": "orphan",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "missing",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "INVALID_DATA"
+    }
+  },
+  {
+    "name": "in-progress",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "in_progress",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "GENERATING"
+    }
+  },
+  {
+    "name": "page-generating",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "保留原文，然后导出。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": true,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "GENERATING"
+    }
+  },
+  {
+    "name": "unknown-content",
+    "capture": {
+      "payload": {
+        "title": "工程笔记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "user-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "怎么保存这段对话？"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "assistant-1",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "unknown_future_panel",
+                "payload": {
+                  "text": "不得无声丢掉"
+                }
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "CONTENT_UNSUPPORTED"
+    }
+  },
+  {
+    "name": "not-an-object",
+    "capture": {
+      "payload": [],
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "INVALID_DATA"
+    }
+  },
+  {
+    "name": "empty",
+    "capture": {
+      "payload": {
+        "title": "空会话",
+        "conversation_id": "fixture-conversation",
+        "current_node": "root",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [],
+            "message": null
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "errorCode": "EMPTY_CONVERSATION"
+    }
+  },
+  {
+    "name": "exclude-internal",
+    "capture": {
+      "payload": {
+        "title": "角色过滤",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-7",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "sys",
+              "author": {
+                "role": "system"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "内部指令，不输出"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [
+              "node-3"
+            ],
+            "message": {
+              "id": "real-u",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "问题"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-3": {
+            "id": "node-3",
+            "parent": "node-2",
+            "children": [
+              "node-4"
+            ],
+            "message": {
+              "id": "analysis",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "隐藏推理，不输出"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "analysis",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-4": {
+            "id": "node-4",
+            "parent": "node-3",
+            "children": [
+              "node-5"
+            ],
+            "message": {
+              "id": "commentary",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "本版本不输出过程提示"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "commentary",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-5": {
+            "id": "node-5",
+            "parent": "node-4",
+            "children": [
+              "node-6"
+            ],
+            "message": {
+              "id": "tool",
+              "author": {
+                "role": "tool"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "原始工具数据"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-6": {
+            "id": "node-6",
+            "parent": "node-5",
+            "children": [
+              "node-7"
+            ],
+            "message": {
+              "id": "hidden",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "内部说明"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {
+                "is_visually_hidden_from_conversation": true
+              },
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-7": {
+            "id": "node-7",
+            "parent": "node-6",
+            "children": [],
+            "message": {
+              "id": "real-a",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "最终回答"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "real-u",
+          "real-a"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "real-u",
+        "real-a"
+      ]
+    }
+  },
+  {
+    "name": "media-placeholder",
+    "capture": {
+      "payload": {
+        "title": "图片说明",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "media-u",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "multimodal_text",
+                "parts": [
+                  "看看这张图",
+                  {
+                    "content_type": "image_asset_pointer",
+                    "asset_pointer": "synthetic-image-pointer"
+                  }
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "media-a",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "文字说明"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "media-u",
+          "media-a"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "media-u",
+        "media-a"
+      ]
+    }
+  },
+  {
+    "name": "citation-outside-code",
+    "capture": {
+      "payload": {
+        "title": "引用标记",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-2",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "cite-u",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "解释引用"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [],
+            "message": {
+              "id": "cite-a",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "有依据。citeturn0search0\n\n```text\nciteturn0search0\n```"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "cite-u",
+          "cite-a"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "cite-u",
+        "cite-a"
+      ]
+    }
+  },
+  {
+    "name": "long-240",
+    "capture": {
+      "payload": {
+        "title": "长会话",
+        "conversation_id": "fixture-conversation",
+        "current_node": "node-240",
+        "mapping": {
+          "root": {
+            "id": "root",
+            "parent": null,
+            "children": [
+              "node-1"
+            ],
+            "message": null
+          },
+          "node-1": {
+            "id": "node-1",
+            "parent": "root",
+            "children": [
+              "node-2"
+            ],
+            "message": {
+              "id": "long-1",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 1 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-2": {
+            "id": "node-2",
+            "parent": "node-1",
+            "children": [
+              "node-3"
+            ],
+            "message": {
+              "id": "long-2",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 2 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-3": {
+            "id": "node-3",
+            "parent": "node-2",
+            "children": [
+              "node-4"
+            ],
+            "message": {
+              "id": "long-3",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 3 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-4": {
+            "id": "node-4",
+            "parent": "node-3",
+            "children": [
+              "node-5"
+            ],
+            "message": {
+              "id": "long-4",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 4 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-5": {
+            "id": "node-5",
+            "parent": "node-4",
+            "children": [
+              "node-6"
+            ],
+            "message": {
+              "id": "long-5",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 5 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-6": {
+            "id": "node-6",
+            "parent": "node-5",
+            "children": [
+              "node-7"
+            ],
+            "message": {
+              "id": "long-6",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 6 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-7": {
+            "id": "node-7",
+            "parent": "node-6",
+            "children": [
+              "node-8"
+            ],
+            "message": {
+              "id": "long-7",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 7 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-8": {
+            "id": "node-8",
+            "parent": "node-7",
+            "children": [
+              "node-9"
+            ],
+            "message": {
+              "id": "long-8",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 8 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-9": {
+            "id": "node-9",
+            "parent": "node-8",
+            "children": [
+              "node-10"
+            ],
+            "message": {
+              "id": "long-9",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 9 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-10": {
+            "id": "node-10",
+            "parent": "node-9",
+            "children": [
+              "node-11"
+            ],
+            "message": {
+              "id": "long-10",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 10 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-11": {
+            "id": "node-11",
+            "parent": "node-10",
+            "children": [
+              "node-12"
+            ],
+            "message": {
+              "id": "long-11",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 11 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-12": {
+            "id": "node-12",
+            "parent": "node-11",
+            "children": [
+              "node-13"
+            ],
+            "message": {
+              "id": "long-12",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 12 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-13": {
+            "id": "node-13",
+            "parent": "node-12",
+            "children": [
+              "node-14"
+            ],
+            "message": {
+              "id": "long-13",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 13 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-14": {
+            "id": "node-14",
+            "parent": "node-13",
+            "children": [
+              "node-15"
+            ],
+            "message": {
+              "id": "long-14",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 14 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-15": {
+            "id": "node-15",
+            "parent": "node-14",
+            "children": [
+              "node-16"
+            ],
+            "message": {
+              "id": "long-15",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 15 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-16": {
+            "id": "node-16",
+            "parent": "node-15",
+            "children": [
+              "node-17"
+            ],
+            "message": {
+              "id": "long-16",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 16 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-17": {
+            "id": "node-17",
+            "parent": "node-16",
+            "children": [
+              "node-18"
+            ],
+            "message": {
+              "id": "long-17",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 17 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-18": {
+            "id": "node-18",
+            "parent": "node-17",
+            "children": [
+              "node-19"
+            ],
+            "message": {
+              "id": "long-18",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 18 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-19": {
+            "id": "node-19",
+            "parent": "node-18",
+            "children": [
+              "node-20"
+            ],
+            "message": {
+              "id": "long-19",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 19 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-20": {
+            "id": "node-20",
+            "parent": "node-19",
+            "children": [
+              "node-21"
+            ],
+            "message": {
+              "id": "long-20",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 20 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-21": {
+            "id": "node-21",
+            "parent": "node-20",
+            "children": [
+              "node-22"
+            ],
+            "message": {
+              "id": "long-21",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 21 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-22": {
+            "id": "node-22",
+            "parent": "node-21",
+            "children": [
+              "node-23"
+            ],
+            "message": {
+              "id": "long-22",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 22 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-23": {
+            "id": "node-23",
+            "parent": "node-22",
+            "children": [
+              "node-24"
+            ],
+            "message": {
+              "id": "long-23",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 23 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-24": {
+            "id": "node-24",
+            "parent": "node-23",
+            "children": [
+              "node-25"
+            ],
+            "message": {
+              "id": "long-24",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 24 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-25": {
+            "id": "node-25",
+            "parent": "node-24",
+            "children": [
+              "node-26"
+            ],
+            "message": {
+              "id": "long-25",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 25 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-26": {
+            "id": "node-26",
+            "parent": "node-25",
+            "children": [
+              "node-27"
+            ],
+            "message": {
+              "id": "long-26",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 26 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-27": {
+            "id": "node-27",
+            "parent": "node-26",
+            "children": [
+              "node-28"
+            ],
+            "message": {
+              "id": "long-27",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 27 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-28": {
+            "id": "node-28",
+            "parent": "node-27",
+            "children": [
+              "node-29"
+            ],
+            "message": {
+              "id": "long-28",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 28 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-29": {
+            "id": "node-29",
+            "parent": "node-28",
+            "children": [
+              "node-30"
+            ],
+            "message": {
+              "id": "long-29",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 29 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-30": {
+            "id": "node-30",
+            "parent": "node-29",
+            "children": [
+              "node-31"
+            ],
+            "message": {
+              "id": "long-30",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 30 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-31": {
+            "id": "node-31",
+            "parent": "node-30",
+            "children": [
+              "node-32"
+            ],
+            "message": {
+              "id": "long-31",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 31 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-32": {
+            "id": "node-32",
+            "parent": "node-31",
+            "children": [
+              "node-33"
+            ],
+            "message": {
+              "id": "long-32",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 32 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-33": {
+            "id": "node-33",
+            "parent": "node-32",
+            "children": [
+              "node-34"
+            ],
+            "message": {
+              "id": "long-33",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 33 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-34": {
+            "id": "node-34",
+            "parent": "node-33",
+            "children": [
+              "node-35"
+            ],
+            "message": {
+              "id": "long-34",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 34 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-35": {
+            "id": "node-35",
+            "parent": "node-34",
+            "children": [
+              "node-36"
+            ],
+            "message": {
+              "id": "long-35",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 35 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-36": {
+            "id": "node-36",
+            "parent": "node-35",
+            "children": [
+              "node-37"
+            ],
+            "message": {
+              "id": "long-36",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 36 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-37": {
+            "id": "node-37",
+            "parent": "node-36",
+            "children": [
+              "node-38"
+            ],
+            "message": {
+              "id": "long-37",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 37 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-38": {
+            "id": "node-38",
+            "parent": "node-37",
+            "children": [
+              "node-39"
+            ],
+            "message": {
+              "id": "long-38",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 38 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-39": {
+            "id": "node-39",
+            "parent": "node-38",
+            "children": [
+              "node-40"
+            ],
+            "message": {
+              "id": "long-39",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 39 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-40": {
+            "id": "node-40",
+            "parent": "node-39",
+            "children": [
+              "node-41"
+            ],
+            "message": {
+              "id": "long-40",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 40 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-41": {
+            "id": "node-41",
+            "parent": "node-40",
+            "children": [
+              "node-42"
+            ],
+            "message": {
+              "id": "long-41",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 41 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-42": {
+            "id": "node-42",
+            "parent": "node-41",
+            "children": [
+              "node-43"
+            ],
+            "message": {
+              "id": "long-42",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 42 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-43": {
+            "id": "node-43",
+            "parent": "node-42",
+            "children": [
+              "node-44"
+            ],
+            "message": {
+              "id": "long-43",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 43 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-44": {
+            "id": "node-44",
+            "parent": "node-43",
+            "children": [
+              "node-45"
+            ],
+            "message": {
+              "id": "long-44",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 44 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-45": {
+            "id": "node-45",
+            "parent": "node-44",
+            "children": [
+              "node-46"
+            ],
+            "message": {
+              "id": "long-45",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 45 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-46": {
+            "id": "node-46",
+            "parent": "node-45",
+            "children": [
+              "node-47"
+            ],
+            "message": {
+              "id": "long-46",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 46 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-47": {
+            "id": "node-47",
+            "parent": "node-46",
+            "children": [
+              "node-48"
+            ],
+            "message": {
+              "id": "long-47",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 47 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-48": {
+            "id": "node-48",
+            "parent": "node-47",
+            "children": [
+              "node-49"
+            ],
+            "message": {
+              "id": "long-48",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 48 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-49": {
+            "id": "node-49",
+            "parent": "node-48",
+            "children": [
+              "node-50"
+            ],
+            "message": {
+              "id": "long-49",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 49 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-50": {
+            "id": "node-50",
+            "parent": "node-49",
+            "children": [
+              "node-51"
+            ],
+            "message": {
+              "id": "long-50",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 50 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-51": {
+            "id": "node-51",
+            "parent": "node-50",
+            "children": [
+              "node-52"
+            ],
+            "message": {
+              "id": "long-51",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 51 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-52": {
+            "id": "node-52",
+            "parent": "node-51",
+            "children": [
+              "node-53"
+            ],
+            "message": {
+              "id": "long-52",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 52 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-53": {
+            "id": "node-53",
+            "parent": "node-52",
+            "children": [
+              "node-54"
+            ],
+            "message": {
+              "id": "long-53",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 53 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-54": {
+            "id": "node-54",
+            "parent": "node-53",
+            "children": [
+              "node-55"
+            ],
+            "message": {
+              "id": "long-54",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 54 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-55": {
+            "id": "node-55",
+            "parent": "node-54",
+            "children": [
+              "node-56"
+            ],
+            "message": {
+              "id": "long-55",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 55 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-56": {
+            "id": "node-56",
+            "parent": "node-55",
+            "children": [
+              "node-57"
+            ],
+            "message": {
+              "id": "long-56",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 56 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-57": {
+            "id": "node-57",
+            "parent": "node-56",
+            "children": [
+              "node-58"
+            ],
+            "message": {
+              "id": "long-57",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 57 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-58": {
+            "id": "node-58",
+            "parent": "node-57",
+            "children": [
+              "node-59"
+            ],
+            "message": {
+              "id": "long-58",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 58 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-59": {
+            "id": "node-59",
+            "parent": "node-58",
+            "children": [
+              "node-60"
+            ],
+            "message": {
+              "id": "long-59",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 59 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-60": {
+            "id": "node-60",
+            "parent": "node-59",
+            "children": [
+              "node-61"
+            ],
+            "message": {
+              "id": "long-60",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 60 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-61": {
+            "id": "node-61",
+            "parent": "node-60",
+            "children": [
+              "node-62"
+            ],
+            "message": {
+              "id": "long-61",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 61 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-62": {
+            "id": "node-62",
+            "parent": "node-61",
+            "children": [
+              "node-63"
+            ],
+            "message": {
+              "id": "long-62",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 62 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-63": {
+            "id": "node-63",
+            "parent": "node-62",
+            "children": [
+              "node-64"
+            ],
+            "message": {
+              "id": "long-63",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 63 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-64": {
+            "id": "node-64",
+            "parent": "node-63",
+            "children": [
+              "node-65"
+            ],
+            "message": {
+              "id": "long-64",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 64 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-65": {
+            "id": "node-65",
+            "parent": "node-64",
+            "children": [
+              "node-66"
+            ],
+            "message": {
+              "id": "long-65",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 65 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-66": {
+            "id": "node-66",
+            "parent": "node-65",
+            "children": [
+              "node-67"
+            ],
+            "message": {
+              "id": "long-66",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 66 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-67": {
+            "id": "node-67",
+            "parent": "node-66",
+            "children": [
+              "node-68"
+            ],
+            "message": {
+              "id": "long-67",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 67 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-68": {
+            "id": "node-68",
+            "parent": "node-67",
+            "children": [
+              "node-69"
+            ],
+            "message": {
+              "id": "long-68",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 68 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-69": {
+            "id": "node-69",
+            "parent": "node-68",
+            "children": [
+              "node-70"
+            ],
+            "message": {
+              "id": "long-69",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 69 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-70": {
+            "id": "node-70",
+            "parent": "node-69",
+            "children": [
+              "node-71"
+            ],
+            "message": {
+              "id": "long-70",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 70 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-71": {
+            "id": "node-71",
+            "parent": "node-70",
+            "children": [
+              "node-72"
+            ],
+            "message": {
+              "id": "long-71",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 71 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-72": {
+            "id": "node-72",
+            "parent": "node-71",
+            "children": [
+              "node-73"
+            ],
+            "message": {
+              "id": "long-72",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 72 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-73": {
+            "id": "node-73",
+            "parent": "node-72",
+            "children": [
+              "node-74"
+            ],
+            "message": {
+              "id": "long-73",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 73 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-74": {
+            "id": "node-74",
+            "parent": "node-73",
+            "children": [
+              "node-75"
+            ],
+            "message": {
+              "id": "long-74",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 74 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-75": {
+            "id": "node-75",
+            "parent": "node-74",
+            "children": [
+              "node-76"
+            ],
+            "message": {
+              "id": "long-75",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 75 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-76": {
+            "id": "node-76",
+            "parent": "node-75",
+            "children": [
+              "node-77"
+            ],
+            "message": {
+              "id": "long-76",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 76 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-77": {
+            "id": "node-77",
+            "parent": "node-76",
+            "children": [
+              "node-78"
+            ],
+            "message": {
+              "id": "long-77",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 77 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-78": {
+            "id": "node-78",
+            "parent": "node-77",
+            "children": [
+              "node-79"
+            ],
+            "message": {
+              "id": "long-78",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 78 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-79": {
+            "id": "node-79",
+            "parent": "node-78",
+            "children": [
+              "node-80"
+            ],
+            "message": {
+              "id": "long-79",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 79 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-80": {
+            "id": "node-80",
+            "parent": "node-79",
+            "children": [
+              "node-81"
+            ],
+            "message": {
+              "id": "long-80",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 80 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-81": {
+            "id": "node-81",
+            "parent": "node-80",
+            "children": [
+              "node-82"
+            ],
+            "message": {
+              "id": "long-81",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 81 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-82": {
+            "id": "node-82",
+            "parent": "node-81",
+            "children": [
+              "node-83"
+            ],
+            "message": {
+              "id": "long-82",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 82 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-83": {
+            "id": "node-83",
+            "parent": "node-82",
+            "children": [
+              "node-84"
+            ],
+            "message": {
+              "id": "long-83",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 83 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-84": {
+            "id": "node-84",
+            "parent": "node-83",
+            "children": [
+              "node-85"
+            ],
+            "message": {
+              "id": "long-84",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 84 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-85": {
+            "id": "node-85",
+            "parent": "node-84",
+            "children": [
+              "node-86"
+            ],
+            "message": {
+              "id": "long-85",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 85 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-86": {
+            "id": "node-86",
+            "parent": "node-85",
+            "children": [
+              "node-87"
+            ],
+            "message": {
+              "id": "long-86",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 86 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-87": {
+            "id": "node-87",
+            "parent": "node-86",
+            "children": [
+              "node-88"
+            ],
+            "message": {
+              "id": "long-87",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 87 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-88": {
+            "id": "node-88",
+            "parent": "node-87",
+            "children": [
+              "node-89"
+            ],
+            "message": {
+              "id": "long-88",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 88 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-89": {
+            "id": "node-89",
+            "parent": "node-88",
+            "children": [
+              "node-90"
+            ],
+            "message": {
+              "id": "long-89",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 89 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-90": {
+            "id": "node-90",
+            "parent": "node-89",
+            "children": [
+              "node-91"
+            ],
+            "message": {
+              "id": "long-90",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 90 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-91": {
+            "id": "node-91",
+            "parent": "node-90",
+            "children": [
+              "node-92"
+            ],
+            "message": {
+              "id": "long-91",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 91 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-92": {
+            "id": "node-92",
+            "parent": "node-91",
+            "children": [
+              "node-93"
+            ],
+            "message": {
+              "id": "long-92",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 92 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-93": {
+            "id": "node-93",
+            "parent": "node-92",
+            "children": [
+              "node-94"
+            ],
+            "message": {
+              "id": "long-93",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 93 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-94": {
+            "id": "node-94",
+            "parent": "node-93",
+            "children": [
+              "node-95"
+            ],
+            "message": {
+              "id": "long-94",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 94 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-95": {
+            "id": "node-95",
+            "parent": "node-94",
+            "children": [
+              "node-96"
+            ],
+            "message": {
+              "id": "long-95",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 95 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-96": {
+            "id": "node-96",
+            "parent": "node-95",
+            "children": [
+              "node-97"
+            ],
+            "message": {
+              "id": "long-96",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 96 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-97": {
+            "id": "node-97",
+            "parent": "node-96",
+            "children": [
+              "node-98"
+            ],
+            "message": {
+              "id": "long-97",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 97 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-98": {
+            "id": "node-98",
+            "parent": "node-97",
+            "children": [
+              "node-99"
+            ],
+            "message": {
+              "id": "long-98",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 98 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-99": {
+            "id": "node-99",
+            "parent": "node-98",
+            "children": [
+              "node-100"
+            ],
+            "message": {
+              "id": "long-99",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 99 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-100": {
+            "id": "node-100",
+            "parent": "node-99",
+            "children": [
+              "node-101"
+            ],
+            "message": {
+              "id": "long-100",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 100 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-101": {
+            "id": "node-101",
+            "parent": "node-100",
+            "children": [
+              "node-102"
+            ],
+            "message": {
+              "id": "long-101",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 101 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-102": {
+            "id": "node-102",
+            "parent": "node-101",
+            "children": [
+              "node-103"
+            ],
+            "message": {
+              "id": "long-102",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 102 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-103": {
+            "id": "node-103",
+            "parent": "node-102",
+            "children": [
+              "node-104"
+            ],
+            "message": {
+              "id": "long-103",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 103 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-104": {
+            "id": "node-104",
+            "parent": "node-103",
+            "children": [
+              "node-105"
+            ],
+            "message": {
+              "id": "long-104",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 104 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-105": {
+            "id": "node-105",
+            "parent": "node-104",
+            "children": [
+              "node-106"
+            ],
+            "message": {
+              "id": "long-105",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 105 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-106": {
+            "id": "node-106",
+            "parent": "node-105",
+            "children": [
+              "node-107"
+            ],
+            "message": {
+              "id": "long-106",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 106 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-107": {
+            "id": "node-107",
+            "parent": "node-106",
+            "children": [
+              "node-108"
+            ],
+            "message": {
+              "id": "long-107",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 107 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-108": {
+            "id": "node-108",
+            "parent": "node-107",
+            "children": [
+              "node-109"
+            ],
+            "message": {
+              "id": "long-108",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 108 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-109": {
+            "id": "node-109",
+            "parent": "node-108",
+            "children": [
+              "node-110"
+            ],
+            "message": {
+              "id": "long-109",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 109 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-110": {
+            "id": "node-110",
+            "parent": "node-109",
+            "children": [
+              "node-111"
+            ],
+            "message": {
+              "id": "long-110",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 110 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-111": {
+            "id": "node-111",
+            "parent": "node-110",
+            "children": [
+              "node-112"
+            ],
+            "message": {
+              "id": "long-111",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 111 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-112": {
+            "id": "node-112",
+            "parent": "node-111",
+            "children": [
+              "node-113"
+            ],
+            "message": {
+              "id": "long-112",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 112 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-113": {
+            "id": "node-113",
+            "parent": "node-112",
+            "children": [
+              "node-114"
+            ],
+            "message": {
+              "id": "long-113",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 113 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-114": {
+            "id": "node-114",
+            "parent": "node-113",
+            "children": [
+              "node-115"
+            ],
+            "message": {
+              "id": "long-114",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 114 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-115": {
+            "id": "node-115",
+            "parent": "node-114",
+            "children": [
+              "node-116"
+            ],
+            "message": {
+              "id": "long-115",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 115 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-116": {
+            "id": "node-116",
+            "parent": "node-115",
+            "children": [
+              "node-117"
+            ],
+            "message": {
+              "id": "long-116",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 116 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-117": {
+            "id": "node-117",
+            "parent": "node-116",
+            "children": [
+              "node-118"
+            ],
+            "message": {
+              "id": "long-117",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 117 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-118": {
+            "id": "node-118",
+            "parent": "node-117",
+            "children": [
+              "node-119"
+            ],
+            "message": {
+              "id": "long-118",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 118 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-119": {
+            "id": "node-119",
+            "parent": "node-118",
+            "children": [
+              "node-120"
+            ],
+            "message": {
+              "id": "long-119",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 119 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-120": {
+            "id": "node-120",
+            "parent": "node-119",
+            "children": [
+              "node-121"
+            ],
+            "message": {
+              "id": "long-120",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 120 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-121": {
+            "id": "node-121",
+            "parent": "node-120",
+            "children": [
+              "node-122"
+            ],
+            "message": {
+              "id": "long-121",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 121 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-122": {
+            "id": "node-122",
+            "parent": "node-121",
+            "children": [
+              "node-123"
+            ],
+            "message": {
+              "id": "long-122",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 122 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-123": {
+            "id": "node-123",
+            "parent": "node-122",
+            "children": [
+              "node-124"
+            ],
+            "message": {
+              "id": "long-123",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 123 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-124": {
+            "id": "node-124",
+            "parent": "node-123",
+            "children": [
+              "node-125"
+            ],
+            "message": {
+              "id": "long-124",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 124 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-125": {
+            "id": "node-125",
+            "parent": "node-124",
+            "children": [
+              "node-126"
+            ],
+            "message": {
+              "id": "long-125",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 125 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-126": {
+            "id": "node-126",
+            "parent": "node-125",
+            "children": [
+              "node-127"
+            ],
+            "message": {
+              "id": "long-126",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 126 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-127": {
+            "id": "node-127",
+            "parent": "node-126",
+            "children": [
+              "node-128"
+            ],
+            "message": {
+              "id": "long-127",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 127 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-128": {
+            "id": "node-128",
+            "parent": "node-127",
+            "children": [
+              "node-129"
+            ],
+            "message": {
+              "id": "long-128",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 128 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-129": {
+            "id": "node-129",
+            "parent": "node-128",
+            "children": [
+              "node-130"
+            ],
+            "message": {
+              "id": "long-129",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 129 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-130": {
+            "id": "node-130",
+            "parent": "node-129",
+            "children": [
+              "node-131"
+            ],
+            "message": {
+              "id": "long-130",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 130 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-131": {
+            "id": "node-131",
+            "parent": "node-130",
+            "children": [
+              "node-132"
+            ],
+            "message": {
+              "id": "long-131",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 131 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-132": {
+            "id": "node-132",
+            "parent": "node-131",
+            "children": [
+              "node-133"
+            ],
+            "message": {
+              "id": "long-132",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 132 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-133": {
+            "id": "node-133",
+            "parent": "node-132",
+            "children": [
+              "node-134"
+            ],
+            "message": {
+              "id": "long-133",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 133 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-134": {
+            "id": "node-134",
+            "parent": "node-133",
+            "children": [
+              "node-135"
+            ],
+            "message": {
+              "id": "long-134",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 134 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-135": {
+            "id": "node-135",
+            "parent": "node-134",
+            "children": [
+              "node-136"
+            ],
+            "message": {
+              "id": "long-135",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 135 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-136": {
+            "id": "node-136",
+            "parent": "node-135",
+            "children": [
+              "node-137"
+            ],
+            "message": {
+              "id": "long-136",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 136 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-137": {
+            "id": "node-137",
+            "parent": "node-136",
+            "children": [
+              "node-138"
+            ],
+            "message": {
+              "id": "long-137",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 137 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-138": {
+            "id": "node-138",
+            "parent": "node-137",
+            "children": [
+              "node-139"
+            ],
+            "message": {
+              "id": "long-138",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 138 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-139": {
+            "id": "node-139",
+            "parent": "node-138",
+            "children": [
+              "node-140"
+            ],
+            "message": {
+              "id": "long-139",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 139 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-140": {
+            "id": "node-140",
+            "parent": "node-139",
+            "children": [
+              "node-141"
+            ],
+            "message": {
+              "id": "long-140",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 140 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-141": {
+            "id": "node-141",
+            "parent": "node-140",
+            "children": [
+              "node-142"
+            ],
+            "message": {
+              "id": "long-141",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 141 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-142": {
+            "id": "node-142",
+            "parent": "node-141",
+            "children": [
+              "node-143"
+            ],
+            "message": {
+              "id": "long-142",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 142 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-143": {
+            "id": "node-143",
+            "parent": "node-142",
+            "children": [
+              "node-144"
+            ],
+            "message": {
+              "id": "long-143",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 143 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-144": {
+            "id": "node-144",
+            "parent": "node-143",
+            "children": [
+              "node-145"
+            ],
+            "message": {
+              "id": "long-144",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 144 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-145": {
+            "id": "node-145",
+            "parent": "node-144",
+            "children": [
+              "node-146"
+            ],
+            "message": {
+              "id": "long-145",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 145 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-146": {
+            "id": "node-146",
+            "parent": "node-145",
+            "children": [
+              "node-147"
+            ],
+            "message": {
+              "id": "long-146",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 146 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-147": {
+            "id": "node-147",
+            "parent": "node-146",
+            "children": [
+              "node-148"
+            ],
+            "message": {
+              "id": "long-147",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 147 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-148": {
+            "id": "node-148",
+            "parent": "node-147",
+            "children": [
+              "node-149"
+            ],
+            "message": {
+              "id": "long-148",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 148 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-149": {
+            "id": "node-149",
+            "parent": "node-148",
+            "children": [
+              "node-150"
+            ],
+            "message": {
+              "id": "long-149",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 149 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-150": {
+            "id": "node-150",
+            "parent": "node-149",
+            "children": [
+              "node-151"
+            ],
+            "message": {
+              "id": "long-150",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 150 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-151": {
+            "id": "node-151",
+            "parent": "node-150",
+            "children": [
+              "node-152"
+            ],
+            "message": {
+              "id": "long-151",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 151 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-152": {
+            "id": "node-152",
+            "parent": "node-151",
+            "children": [
+              "node-153"
+            ],
+            "message": {
+              "id": "long-152",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 152 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-153": {
+            "id": "node-153",
+            "parent": "node-152",
+            "children": [
+              "node-154"
+            ],
+            "message": {
+              "id": "long-153",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 153 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-154": {
+            "id": "node-154",
+            "parent": "node-153",
+            "children": [
+              "node-155"
+            ],
+            "message": {
+              "id": "long-154",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 154 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-155": {
+            "id": "node-155",
+            "parent": "node-154",
+            "children": [
+              "node-156"
+            ],
+            "message": {
+              "id": "long-155",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 155 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-156": {
+            "id": "node-156",
+            "parent": "node-155",
+            "children": [
+              "node-157"
+            ],
+            "message": {
+              "id": "long-156",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 156 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-157": {
+            "id": "node-157",
+            "parent": "node-156",
+            "children": [
+              "node-158"
+            ],
+            "message": {
+              "id": "long-157",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 157 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-158": {
+            "id": "node-158",
+            "parent": "node-157",
+            "children": [
+              "node-159"
+            ],
+            "message": {
+              "id": "long-158",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 158 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-159": {
+            "id": "node-159",
+            "parent": "node-158",
+            "children": [
+              "node-160"
+            ],
+            "message": {
+              "id": "long-159",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 159 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-160": {
+            "id": "node-160",
+            "parent": "node-159",
+            "children": [
+              "node-161"
+            ],
+            "message": {
+              "id": "long-160",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 160 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-161": {
+            "id": "node-161",
+            "parent": "node-160",
+            "children": [
+              "node-162"
+            ],
+            "message": {
+              "id": "long-161",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 161 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-162": {
+            "id": "node-162",
+            "parent": "node-161",
+            "children": [
+              "node-163"
+            ],
+            "message": {
+              "id": "long-162",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 162 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-163": {
+            "id": "node-163",
+            "parent": "node-162",
+            "children": [
+              "node-164"
+            ],
+            "message": {
+              "id": "long-163",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 163 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-164": {
+            "id": "node-164",
+            "parent": "node-163",
+            "children": [
+              "node-165"
+            ],
+            "message": {
+              "id": "long-164",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 164 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-165": {
+            "id": "node-165",
+            "parent": "node-164",
+            "children": [
+              "node-166"
+            ],
+            "message": {
+              "id": "long-165",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 165 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-166": {
+            "id": "node-166",
+            "parent": "node-165",
+            "children": [
+              "node-167"
+            ],
+            "message": {
+              "id": "long-166",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 166 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-167": {
+            "id": "node-167",
+            "parent": "node-166",
+            "children": [
+              "node-168"
+            ],
+            "message": {
+              "id": "long-167",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 167 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-168": {
+            "id": "node-168",
+            "parent": "node-167",
+            "children": [
+              "node-169"
+            ],
+            "message": {
+              "id": "long-168",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 168 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-169": {
+            "id": "node-169",
+            "parent": "node-168",
+            "children": [
+              "node-170"
+            ],
+            "message": {
+              "id": "long-169",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 169 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-170": {
+            "id": "node-170",
+            "parent": "node-169",
+            "children": [
+              "node-171"
+            ],
+            "message": {
+              "id": "long-170",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 170 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-171": {
+            "id": "node-171",
+            "parent": "node-170",
+            "children": [
+              "node-172"
+            ],
+            "message": {
+              "id": "long-171",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 171 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-172": {
+            "id": "node-172",
+            "parent": "node-171",
+            "children": [
+              "node-173"
+            ],
+            "message": {
+              "id": "long-172",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 172 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-173": {
+            "id": "node-173",
+            "parent": "node-172",
+            "children": [
+              "node-174"
+            ],
+            "message": {
+              "id": "long-173",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 173 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-174": {
+            "id": "node-174",
+            "parent": "node-173",
+            "children": [
+              "node-175"
+            ],
+            "message": {
+              "id": "long-174",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 174 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-175": {
+            "id": "node-175",
+            "parent": "node-174",
+            "children": [
+              "node-176"
+            ],
+            "message": {
+              "id": "long-175",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 175 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-176": {
+            "id": "node-176",
+            "parent": "node-175",
+            "children": [
+              "node-177"
+            ],
+            "message": {
+              "id": "long-176",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 176 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-177": {
+            "id": "node-177",
+            "parent": "node-176",
+            "children": [
+              "node-178"
+            ],
+            "message": {
+              "id": "long-177",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 177 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-178": {
+            "id": "node-178",
+            "parent": "node-177",
+            "children": [
+              "node-179"
+            ],
+            "message": {
+              "id": "long-178",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 178 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-179": {
+            "id": "node-179",
+            "parent": "node-178",
+            "children": [
+              "node-180"
+            ],
+            "message": {
+              "id": "long-179",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 179 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-180": {
+            "id": "node-180",
+            "parent": "node-179",
+            "children": [
+              "node-181"
+            ],
+            "message": {
+              "id": "long-180",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 180 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-181": {
+            "id": "node-181",
+            "parent": "node-180",
+            "children": [
+              "node-182"
+            ],
+            "message": {
+              "id": "long-181",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 181 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-182": {
+            "id": "node-182",
+            "parent": "node-181",
+            "children": [
+              "node-183"
+            ],
+            "message": {
+              "id": "long-182",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 182 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-183": {
+            "id": "node-183",
+            "parent": "node-182",
+            "children": [
+              "node-184"
+            ],
+            "message": {
+              "id": "long-183",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 183 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-184": {
+            "id": "node-184",
+            "parent": "node-183",
+            "children": [
+              "node-185"
+            ],
+            "message": {
+              "id": "long-184",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 184 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-185": {
+            "id": "node-185",
+            "parent": "node-184",
+            "children": [
+              "node-186"
+            ],
+            "message": {
+              "id": "long-185",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 185 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-186": {
+            "id": "node-186",
+            "parent": "node-185",
+            "children": [
+              "node-187"
+            ],
+            "message": {
+              "id": "long-186",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 186 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-187": {
+            "id": "node-187",
+            "parent": "node-186",
+            "children": [
+              "node-188"
+            ],
+            "message": {
+              "id": "long-187",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 187 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-188": {
+            "id": "node-188",
+            "parent": "node-187",
+            "children": [
+              "node-189"
+            ],
+            "message": {
+              "id": "long-188",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 188 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-189": {
+            "id": "node-189",
+            "parent": "node-188",
+            "children": [
+              "node-190"
+            ],
+            "message": {
+              "id": "long-189",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 189 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-190": {
+            "id": "node-190",
+            "parent": "node-189",
+            "children": [
+              "node-191"
+            ],
+            "message": {
+              "id": "long-190",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 190 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-191": {
+            "id": "node-191",
+            "parent": "node-190",
+            "children": [
+              "node-192"
+            ],
+            "message": {
+              "id": "long-191",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 191 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-192": {
+            "id": "node-192",
+            "parent": "node-191",
+            "children": [
+              "node-193"
+            ],
+            "message": {
+              "id": "long-192",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 192 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-193": {
+            "id": "node-193",
+            "parent": "node-192",
+            "children": [
+              "node-194"
+            ],
+            "message": {
+              "id": "long-193",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 193 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-194": {
+            "id": "node-194",
+            "parent": "node-193",
+            "children": [
+              "node-195"
+            ],
+            "message": {
+              "id": "long-194",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 194 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-195": {
+            "id": "node-195",
+            "parent": "node-194",
+            "children": [
+              "node-196"
+            ],
+            "message": {
+              "id": "long-195",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 195 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-196": {
+            "id": "node-196",
+            "parent": "node-195",
+            "children": [
+              "node-197"
+            ],
+            "message": {
+              "id": "long-196",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 196 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-197": {
+            "id": "node-197",
+            "parent": "node-196",
+            "children": [
+              "node-198"
+            ],
+            "message": {
+              "id": "long-197",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 197 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-198": {
+            "id": "node-198",
+            "parent": "node-197",
+            "children": [
+              "node-199"
+            ],
+            "message": {
+              "id": "long-198",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 198 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-199": {
+            "id": "node-199",
+            "parent": "node-198",
+            "children": [
+              "node-200"
+            ],
+            "message": {
+              "id": "long-199",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 199 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-200": {
+            "id": "node-200",
+            "parent": "node-199",
+            "children": [
+              "node-201"
+            ],
+            "message": {
+              "id": "long-200",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 200 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-201": {
+            "id": "node-201",
+            "parent": "node-200",
+            "children": [
+              "node-202"
+            ],
+            "message": {
+              "id": "long-201",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 201 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-202": {
+            "id": "node-202",
+            "parent": "node-201",
+            "children": [
+              "node-203"
+            ],
+            "message": {
+              "id": "long-202",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 202 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-203": {
+            "id": "node-203",
+            "parent": "node-202",
+            "children": [
+              "node-204"
+            ],
+            "message": {
+              "id": "long-203",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 203 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-204": {
+            "id": "node-204",
+            "parent": "node-203",
+            "children": [
+              "node-205"
+            ],
+            "message": {
+              "id": "long-204",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 204 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-205": {
+            "id": "node-205",
+            "parent": "node-204",
+            "children": [
+              "node-206"
+            ],
+            "message": {
+              "id": "long-205",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 205 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-206": {
+            "id": "node-206",
+            "parent": "node-205",
+            "children": [
+              "node-207"
+            ],
+            "message": {
+              "id": "long-206",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 206 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-207": {
+            "id": "node-207",
+            "parent": "node-206",
+            "children": [
+              "node-208"
+            ],
+            "message": {
+              "id": "long-207",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 207 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-208": {
+            "id": "node-208",
+            "parent": "node-207",
+            "children": [
+              "node-209"
+            ],
+            "message": {
+              "id": "long-208",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 208 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-209": {
+            "id": "node-209",
+            "parent": "node-208",
+            "children": [
+              "node-210"
+            ],
+            "message": {
+              "id": "long-209",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 209 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-210": {
+            "id": "node-210",
+            "parent": "node-209",
+            "children": [
+              "node-211"
+            ],
+            "message": {
+              "id": "long-210",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 210 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-211": {
+            "id": "node-211",
+            "parent": "node-210",
+            "children": [
+              "node-212"
+            ],
+            "message": {
+              "id": "long-211",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 211 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-212": {
+            "id": "node-212",
+            "parent": "node-211",
+            "children": [
+              "node-213"
+            ],
+            "message": {
+              "id": "long-212",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 212 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-213": {
+            "id": "node-213",
+            "parent": "node-212",
+            "children": [
+              "node-214"
+            ],
+            "message": {
+              "id": "long-213",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 213 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-214": {
+            "id": "node-214",
+            "parent": "node-213",
+            "children": [
+              "node-215"
+            ],
+            "message": {
+              "id": "long-214",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 214 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-215": {
+            "id": "node-215",
+            "parent": "node-214",
+            "children": [
+              "node-216"
+            ],
+            "message": {
+              "id": "long-215",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 215 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-216": {
+            "id": "node-216",
+            "parent": "node-215",
+            "children": [
+              "node-217"
+            ],
+            "message": {
+              "id": "long-216",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 216 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-217": {
+            "id": "node-217",
+            "parent": "node-216",
+            "children": [
+              "node-218"
+            ],
+            "message": {
+              "id": "long-217",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 217 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-218": {
+            "id": "node-218",
+            "parent": "node-217",
+            "children": [
+              "node-219"
+            ],
+            "message": {
+              "id": "long-218",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 218 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-219": {
+            "id": "node-219",
+            "parent": "node-218",
+            "children": [
+              "node-220"
+            ],
+            "message": {
+              "id": "long-219",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 219 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-220": {
+            "id": "node-220",
+            "parent": "node-219",
+            "children": [
+              "node-221"
+            ],
+            "message": {
+              "id": "long-220",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 220 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-221": {
+            "id": "node-221",
+            "parent": "node-220",
+            "children": [
+              "node-222"
+            ],
+            "message": {
+              "id": "long-221",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 221 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-222": {
+            "id": "node-222",
+            "parent": "node-221",
+            "children": [
+              "node-223"
+            ],
+            "message": {
+              "id": "long-222",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 222 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-223": {
+            "id": "node-223",
+            "parent": "node-222",
+            "children": [
+              "node-224"
+            ],
+            "message": {
+              "id": "long-223",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 223 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-224": {
+            "id": "node-224",
+            "parent": "node-223",
+            "children": [
+              "node-225"
+            ],
+            "message": {
+              "id": "long-224",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 224 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-225": {
+            "id": "node-225",
+            "parent": "node-224",
+            "children": [
+              "node-226"
+            ],
+            "message": {
+              "id": "long-225",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 225 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-226": {
+            "id": "node-226",
+            "parent": "node-225",
+            "children": [
+              "node-227"
+            ],
+            "message": {
+              "id": "long-226",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 226 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-227": {
+            "id": "node-227",
+            "parent": "node-226",
+            "children": [
+              "node-228"
+            ],
+            "message": {
+              "id": "long-227",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 227 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-228": {
+            "id": "node-228",
+            "parent": "node-227",
+            "children": [
+              "node-229"
+            ],
+            "message": {
+              "id": "long-228",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 228 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-229": {
+            "id": "node-229",
+            "parent": "node-228",
+            "children": [
+              "node-230"
+            ],
+            "message": {
+              "id": "long-229",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 229 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-230": {
+            "id": "node-230",
+            "parent": "node-229",
+            "children": [
+              "node-231"
+            ],
+            "message": {
+              "id": "long-230",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 230 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-231": {
+            "id": "node-231",
+            "parent": "node-230",
+            "children": [
+              "node-232"
+            ],
+            "message": {
+              "id": "long-231",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 231 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-232": {
+            "id": "node-232",
+            "parent": "node-231",
+            "children": [
+              "node-233"
+            ],
+            "message": {
+              "id": "long-232",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 232 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-233": {
+            "id": "node-233",
+            "parent": "node-232",
+            "children": [
+              "node-234"
+            ],
+            "message": {
+              "id": "long-233",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 233 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-234": {
+            "id": "node-234",
+            "parent": "node-233",
+            "children": [
+              "node-235"
+            ],
+            "message": {
+              "id": "long-234",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 234 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-235": {
+            "id": "node-235",
+            "parent": "node-234",
+            "children": [
+              "node-236"
+            ],
+            "message": {
+              "id": "long-235",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 235 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-236": {
+            "id": "node-236",
+            "parent": "node-235",
+            "children": [
+              "node-237"
+            ],
+            "message": {
+              "id": "long-236",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 236 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-237": {
+            "id": "node-237",
+            "parent": "node-236",
+            "children": [
+              "node-238"
+            ],
+            "message": {
+              "id": "long-237",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 237 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-238": {
+            "id": "node-238",
+            "parent": "node-237",
+            "children": [
+              "node-239"
+            ],
+            "message": {
+              "id": "long-238",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 238 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          },
+          "node-239": {
+            "id": "node-239",
+            "parent": "node-238",
+            "children": [
+              "node-240"
+            ],
+            "message": {
+              "id": "long-239",
+              "author": {
+                "role": "user"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 239 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {}
+            }
+          },
+          "node-240": {
+            "id": "node-240",
+            "parent": "node-239",
+            "children": [],
+            "message": {
+              "id": "long-240",
+              "author": {
+                "role": "assistant"
+              },
+              "content": {
+                "content_type": "text",
+                "parts": [
+                  "第 240 条正文。"
+                ]
+              },
+              "status": "finished_successfully",
+              "metadata": {},
+              "channel": "final",
+              "recipient": "all",
+              "end_turn": true
+            }
+          }
+        }
+      },
+      "probe": {
+        "conversationId": "fixture-conversation",
+        "pathname": "/c/fixture-conversation",
+        "visibleMessageIds": [
+          "long-239",
+          "long-240"
+        ],
+        "generating": false,
+        "signature": "synthetic-stable"
+      }
+    },
+    "expected": {
+      "messageIds": [
+        "long-1",
+        "long-2",
+        "long-3",
+        "long-4",
+        "long-5",
+        "long-6",
+        "long-7",
+        "long-8",
+        "long-9",
+        "long-10",
+        "long-11",
+        "long-12",
+        "long-13",
+        "long-14",
+        "long-15",
+        "long-16",
+        "long-17",
+        "long-18",
+        "long-19",
+        "long-20",
+        "long-21",
+        "long-22",
+        "long-23",
+        "long-24",
+        "long-25",
+        "long-26",
+        "long-27",
+        "long-28",
+        "long-29",
+        "long-30",
+        "long-31",
+        "long-32",
+        "long-33",
+        "long-34",
+        "long-35",
+        "long-36",
+        "long-37",
+        "long-38",
+        "long-39",
+        "long-40",
+        "long-41",
+        "long-42",
+        "long-43",
+        "long-44",
+        "long-45",
+        "long-46",
+        "long-47",
+        "long-48",
+        "long-49",
+        "long-50",
+        "long-51",
+        "long-52",
+        "long-53",
+        "long-54",
+        "long-55",
+        "long-56",
+        "long-57",
+        "long-58",
+        "long-59",
+        "long-60",
+        "long-61",
+        "long-62",
+        "long-63",
+        "long-64",
+        "long-65",
+        "long-66",
+        "long-67",
+        "long-68",
+        "long-69",
+        "long-70",
+        "long-71",
+        "long-72",
+        "long-73",
+        "long-74",
+        "long-75",
+        "long-76",
+        "long-77",
+        "long-78",
+        "long-79",
+        "long-80",
+        "long-81",
+        "long-82",
+        "long-83",
+        "long-84",
+        "long-85",
+        "long-86",
+        "long-87",
+        "long-88",
+        "long-89",
+        "long-90",
+        "long-91",
+        "long-92",
+        "long-93",
+        "long-94",
+        "long-95",
+        "long-96",
+        "long-97",
+        "long-98",
+        "long-99",
+        "long-100",
+        "long-101",
+        "long-102",
+        "long-103",
+        "long-104",
+        "long-105",
+        "long-106",
+        "long-107",
+        "long-108",
+        "long-109",
+        "long-110",
+        "long-111",
+        "long-112",
+        "long-113",
+        "long-114",
+        "long-115",
+        "long-116",
+        "long-117",
+        "long-118",
+        "long-119",
+        "long-120",
+        "long-121",
+        "long-122",
+        "long-123",
+        "long-124",
+        "long-125",
+        "long-126",
+        "long-127",
+        "long-128",
+        "long-129",
+        "long-130",
+        "long-131",
+        "long-132",
+        "long-133",
+        "long-134",
+        "long-135",
+        "long-136",
+        "long-137",
+        "long-138",
+        "long-139",
+        "long-140",
+        "long-141",
+        "long-142",
+        "long-143",
+        "long-144",
+        "long-145",
+        "long-146",
+        "long-147",
+        "long-148",
+        "long-149",
+        "long-150",
+        "long-151",
+        "long-152",
+        "long-153",
+        "long-154",
+        "long-155",
+        "long-156",
+        "long-157",
+        "long-158",
+        "long-159",
+        "long-160",
+        "long-161",
+        "long-162",
+        "long-163",
+        "long-164",
+        "long-165",
+        "long-166",
+        "long-167",
+        "long-168",
+        "long-169",
+        "long-170",
+        "long-171",
+        "long-172",
+        "long-173",
+        "long-174",
+        "long-175",
+        "long-176",
+        "long-177",
+        "long-178",
+        "long-179",
+        "long-180",
+        "long-181",
+        "long-182",
+        "long-183",
+        "long-184",
+        "long-185",
+        "long-186",
+        "long-187",
+        "long-188",
+        "long-189",
+        "long-190",
+        "long-191",
+        "long-192",
+        "long-193",
+        "long-194",
+        "long-195",
+        "long-196",
+        "long-197",
+        "long-198",
+        "long-199",
+        "long-200",
+        "long-201",
+        "long-202",
+        "long-203",
+        "long-204",
+        "long-205",
+        "long-206",
+        "long-207",
+        "long-208",
+        "long-209",
+        "long-210",
+        "long-211",
+        "long-212",
+        "long-213",
+        "long-214",
+        "long-215",
+        "long-216",
+        "long-217",
+        "long-218",
+        "long-219",
+        "long-220",
+        "long-221",
+        "long-222",
+        "long-223",
+        "long-224",
+        "long-225",
+        "long-226",
+        "long-227",
+        "long-228",
+        "long-229",
+        "long-230",
+        "long-231",
+        "long-232",
+        "long-233",
+        "long-234",
+        "long-235",
+        "long-236",
+        "long-237",
+        "long-238",
+        "long-239",
+        "long-240"
+      ]
+    }
+  }
+]

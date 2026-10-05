@@ -1,0 +1,75 @@
+{
+  "planRevision": "2.0",
+  "productVersion": "0.1.0",
+  "checkedOn": "2026-10-04",
+  "scope": "Implementation-kit and offline prototype only; not a completed extension.",
+  "checks": {
+    "verify-kit": {
+      "result": "PASS",
+      "output": "KIT VALID: 10 JSON files, 5 Node scripts, 16 synthetic scenarios; required files and relative links checked. This does NOT run the application tests or validate live ChatGPT."
+    },
+    "check-boundaries": {
+      "result": "PASS",
+      "output": "BOUNDARIES OK: 3 core modules, one explicit ChatGPT adapter, unchanged permissions. Static smoke check only, not type, business or live-site verification."
+    },
+    "unchangedScope": {
+      "result": "PASS",
+      "fixtureBytesUnchanged": true,
+      "dependencyDeclarationsUnchanged": true,
+      "permissionsUnchanged": true
+    },
+    "packagerIsolated": {
+      "result": "PASS",
+      "scope": "synthetic dist only, not a built extension",
+      "zipPrefix": "chatcarry",
+      "rejectsStarterStubs": true,
+      "crcAndBytes": "PASS"
+    },
+    "sourceTypeCheck": {
+      "result": "PASS",
+      "compiler": "5.8.3",
+      "scope": "10 starter src files only; excludes external-dependency config/tests and is not the target-toolchain check"
+    },
+    "typescriptSyntax": {
+      "result": "PASS",
+      "compiler": "5.8.3",
+      "files": 12
+    },
+    "adapterSeamRuntime": {
+      "result": "PASS",
+      "scope": "locally transpiled starter modules only, not Vitest or a real Chrome extension",
+      "positiveOrigins": 3,
+      "rejectedOrigins": 10,
+      "coverageAndEmptyGuards": "PASS"
+    },
+    "uiOfflinePrototype": {
+      "result": "PASS",
+      "scope": "offline HTML preview only, not extension UI or ChatGPT",
+      "browser": "144.0.7559.96",
+      "states": 9,
+      "twoPrimaryActions": "PASS",
+      "newBrandAndProviderLabel": "PASS",
+      "retryAndManualCopyFallback": "PASS",
+      "demoMarkdownBytes": "PASS",
+      "lightDarkNarrowScreenshots": "PASS",
+      "pageErrors": [],
+      "externalRequests": [],
+      "notVerified": [
+        "real clipboard success",
+        "Chrome action popup lifecycle",
+        "extension download API"
+      ],
+      "launchNote": "Bundled Playwright browser missing; used already-installed /usr/bin/chromium. No browser installation or user-profile access."
+    }
+  },
+  "notRun": [
+    "Node 24 dependency bootstrap",
+    "Target TypeScript/Oxlint/Oxfmt toolchain checks",
+    "Vitest business tests",
+    "Vite production build",
+    "Real extension E2E",
+    "Live ChatGPT session",
+    "Other platform implementation or live validation",
+    "Real extension clipboard and post-popup-close download"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "ChatCarry · 对话导出",
+  "version": "0.1.0",
+  "description": "复制当前 ChatGPT 对话纯文本，或导出 Markdown。",
+  "minimum_chrome_version": "120",
+  "action": {
+    "default_title": "ChatCarry · 对话导出",
+    "default_popup": "index.html"
+  },
+  "permissions": ["activeTab", "scripting", "clipboardWrite", "downloads"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  }
+}

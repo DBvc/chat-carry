@@ -1,0 +1,22 @@
+{
+  "checkedOn": "2026-10-04",
+  "kind": "web-observed-baseline-not-installed",
+  "versions": {
+    "vite": "8.3.2",
+    "typescript": "7.0.2",
+    "oxlint": "1.86.0",
+    "oxfmt": "0.71.0"
+  },
+  "nodePolicy": "24 LTS latest patch",
+  "resolveAtBootstrap": [
+    "pnpm",
+    "vitest",
+    "@playwright/test",
+    "marked",
+    "oxlint-tsgolint",
+    "@types/chrome",
+    "@types/node"
+  ],
+  "note": "No package installation or project lockfile was generated in the authoring environment. Actual resolved versions are written to toolchain-resolved.json by bootstrap.",
+  "provenance": "Inherited from plan revision 1.0; not rechecked or installed during revision 2.0."
+}

@@ -1,0 +1,59 @@
+{
+  "resolvedAt": "2026-10-05T08:59:05.009Z",
+  "node": "24.11.0",
+  "requested": {
+    "vite": "vite@latest",
+    "typescript": "typescript@latest",
+    "oxlint": "oxlint@latest",
+    "oxlint-tsgolint": "oxlint-tsgolint@latest",
+    "oxfmt": "oxfmt@latest",
+    "vitest": "vitest@latest",
+    "@playwright/test": "@playwright/test@latest",
+    "@types/chrome": "@types/chrome@latest",
+    "@types/node": "@types/node@24",
+    "marked": "marked@latest",
+    "pnpm": "pnpm@latest"
+  },
+  "resolved": {
+    "vite": "8.3.2",
+    "typescript": "7.0.2",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2003",
+    "oxfmt": "0.71.0",
+    "vitest": "5.0.3",
+    "@playwright/test": "1.63.0",
+    "@types/chrome": "0.3.4",
+    "@types/node": "24.19.1",
+    "marked": "18.0.14",
+    "pnpm": "12.9.1"
+  },
+  "note": "Resolved from npm. Installation and quality checks are separate evidence.",
+  "validatedNode": "24.21.0",
+  "nodeSource": "https://nodejs.org/dist/index.json",
+  "actions": [
+    {
+      "repository": "actions/checkout",
+      "version": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "source": "https://github.com/actions/checkout/releases/tag/v7.0.1"
+    },
+    {
+      "repository": "actions/setup-node",
+      "version": "v7.0.0",
+      "sha": "820762786026740c76f36085b0efc47a31fe5020",
+      "source": "https://github.com/actions/setup-node/releases/tag/v7.0.0"
+    },
+    {
+      "repository": "actions/upload-artifact",
+      "version": "v7.0.1",
+      "sha": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+      "source": "https://github.com/actions/upload-artifact/releases/tag/v7.0.1"
+    },
+    {
+      "repository": "pnpm/action-setup",
+      "version": "v6.1.0",
+      "sha": "ea17c68df8912ef543352723c149a84f56e3d413",
+      "source": "https://github.com/pnpm/action-setup/releases/tag/v6.1.0"
+    }
+  ]
+}
