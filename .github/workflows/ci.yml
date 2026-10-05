@@ -1,4 +1,4 @@
-name: Foundation
+name: Reading stage
 
 on:
   push:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   foundation:
-    name: Infrastructure only
+    name: Infrastructure and conversation reading
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -28,9 +28,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      # Business contracts remain red until the next implementation stage.
-      # This job deliberately claims infrastructure validation only.
-      - run: pnpm check:foundation
+      # Rendering and delivery contracts remain red until their implementation stage.
+      # This job covers infrastructure and conversation reading only.
+      - run: pnpm check:reading
       - name: Upload browser diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

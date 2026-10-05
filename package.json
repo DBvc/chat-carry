@@ -22,7 +22,9 @@
     "check": "pnpm check:kit && pnpm check:boundaries && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:foundation:e2e && pnpm test:e2e",
     "package": "node tools/package.mjs",
     "check:boundaries": "node tools/check-boundaries.mjs",
-    "check:kit": "node tools/verify-kit.mjs"
+    "check:kit": "node tools/verify-kit.mjs",
+    "test:reading": "vitest run tests/chatgpt-capture.spec.ts tests/chatgpt-normalize.spec.ts tests/popup-prepare.spec.ts",
+    "check:reading": "pnpm check:foundation && pnpm test:reading && pnpm test:e2e"
   },
   "dependencies": {
     "marked": "18.0.14"
