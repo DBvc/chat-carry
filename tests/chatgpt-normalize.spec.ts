@@ -359,6 +359,19 @@ describe("content and completion", () => {
     expect(result.warnings).toEqual([]);
   });
 
+  it("keeps code citations literal after a formula containing a backtick", () => {
+    const capture = sample();
+    const formula = "\\(\\text{`} + x\\)";
+    const citation = "citeturn0search0";
+    answer(capture).content = {
+      content_type: "text",
+      parts: [`${formula} and \`${citation}\` then ${citation}`],
+    };
+    const result = normalizeConversation(capture);
+    expect(result.messages[1]?.body).toBe(`${formula} and \`${citation}\` then [引用见原对话]`);
+    expect(result.warnings).toEqual(["部分引用请查看原对话"]);
+  });
+
   it("replaces standalone memory citations while preserving literal code examples", () => {
     const capture = sample();
     const marker = "\uE200memcite\uE201";

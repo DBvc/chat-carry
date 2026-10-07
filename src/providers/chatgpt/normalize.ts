@@ -1,4 +1,4 @@
-import { Lexer, marked } from "marked";
+import { markdown } from "../../core/markdown";
 import { assertExportable, ExportError } from "../../core/model";
 import type { Conversation, Message } from "../../core/model";
 import type { Capture } from "./capture";
@@ -93,14 +93,16 @@ function cleanReferences(body: string, warnings: Set<string>): string {
   const codeOccurrences = new Set<number>();
   const labels = new RegExp(`${prefix}(\\d+)END`, "g");
   try {
-    // This callback is synchronous; marked's shared return type also permits async visitors.
-    // oxlint-disable-next-line typescript/no-floating-promises
-    marked.walkTokens(Lexer.lex(labeled), (token) => {
-      if (token.type !== "code" && token.type !== "codespan") return;
-      for (const label of token.raw.matchAll(labels)) {
-        codeOccurrences.add(Number(label[1]));
+    const pending = [markdown.parse(labeled, {})];
+    while (pending.length)
+      for (const token of pending.pop()!) {
+        if (token.children) pending.push(token.children);
+        if (["code_inline", "code_block", "fence"].includes(token.type)) {
+          for (const label of token.content.matchAll(labels)) {
+            codeOccurrences.add(Number(label[1]));
+          }
+        }
       }
-    });
   } catch {
     unsupported();
   }

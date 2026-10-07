@@ -27,7 +27,7 @@
     "check:reading": "pnpm check:foundation && pnpm test:reading && pnpm test:e2e"
   },
   "dependencies": {
-    "marked": "18.0.14"
+    "markdown-it": "15.0.2"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

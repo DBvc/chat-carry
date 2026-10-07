@@ -4,6 +4,9 @@ import { extensionTests } from "./extension-fixture";
 import type { ExtensionFixture } from "./extension-fixture";
 import type { Capture } from "../../src/providers/chatgpt/capture";
 import { normalizeConversation } from "../../src/providers/chatgpt/normalize";
+import { renderMarkdown, renderText } from "../../src/core/render";
+import { readFile, realpath } from "node:fs/promises";
+import path from "node:path";
 
 const test = extensionTests(["https://chatgpt.com/*"]);
 const conversationId = "fixture-conversation";
@@ -22,9 +25,12 @@ interface InjectionObservation {
 interface BrowserObservations {
   injections: InjectionObservation[];
   deliveries: string[];
+  downloadIds: number[];
 }
 
 interface Scenario {
+  allowDelivery?: boolean;
+  denyClipboard?: boolean;
   modernIds?: boolean;
   noMessageIds?: boolean;
   generating?: boolean;
@@ -113,16 +119,16 @@ function syntheticPage(scenario: Scenario) {
     : html;
 }
 
-async function observeProductionCalls(popup: Page, fixtureUrl: string) {
+async function observeProductionCalls(popup: Page, fixtureUrl: string, scenario: Scenario) {
   await popup.addInitScript(
-    ({ selectedUrl }) => {
+    ({ selectedUrl, allowDelivery, denyClipboard }) => {
       // Only tab selection is substituted. MAIN functions, arguments, results and
       // their serialization still go through Chromium's actual scripting API.
       const query = chrome.tabs.query.bind(chrome.tabs);
       chrome.tabs.query = ((info: chrome.tabs.QueryInfo) =>
         query(info.active ? { url: selectedUrl } : info)) as typeof chrome.tabs.query;
 
-      const observations: BrowserObservations = { injections: [], deliveries: [] };
+      const observations: BrowserObservations = { injections: [], deliveries: [], downloadIds: [] };
       Object.assign(window, { chatcarryTest: observations });
       const execute = chrome.scripting.executeScript.bind(chrome.scripting);
       chrome.scripting.executeScript = (async (
@@ -150,16 +156,26 @@ async function observeProductionCalls(popup: Page, fixtureUrl: string) {
       }) as typeof chrome.scripting.executeScript;
 
       // Guard the test machine as well as assert B06: preparation has no delivery.
-      navigator.clipboard.writeText = async () => {
+      const writeText = navigator.clipboard.writeText.bind(navigator.clipboard);
+      navigator.clipboard.writeText = async (text) => {
         observations.deliveries.push("clipboard");
-        throw new Error("Unexpected clipboard write while only preparing a snapshot.");
+        if (!allowDelivery || denyClipboard) throw new Error("Synthetic clipboard denial.");
+        await writeText(text);
       };
-      chrome.downloads.download = (async () => {
+      const download = chrome.downloads.download.bind(chrome.downloads);
+      chrome.downloads.download = (async (options: chrome.downloads.DownloadOptions) => {
         observations.deliveries.push("download");
-        throw new Error("Unexpected download while only preparing a snapshot.");
+        if (!allowDelivery) throw new Error("Unexpected download while only preparing a snapshot.");
+        const id = await download(options);
+        observations.downloadIds.push(id);
+        return id;
       }) as typeof chrome.downloads.download;
     },
-    { selectedUrl: fixtureUrl },
+    {
+      selectedUrl: fixtureUrl,
+      allowDelivery: scenario.allowDelivery,
+      denyClipboard: scenario.denyClipboard,
+    },
   );
 }
 
@@ -236,7 +252,7 @@ async function openScenario(extension: ExtensionFixture, scenario: Scenario = {}
   popup.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
-  await observeProductionCalls(popup, conversationUrl);
+  await observeProductionCalls(popup, conversationUrl, scenario);
   await popup.goto(extension.popupUrl);
   return {
     popup,
@@ -248,9 +264,13 @@ async function openScenario(extension: ExtensionFixture, scenario: Scenario = {}
   };
 }
 
-async function expectNoDelivery(popup: Page) {
-  await expect(popup.getByRole("button", { name: "复制纯文本", exact: true })).toBeDisabled();
-  await expect(popup.getByRole("button", { name: "导出 Markdown", exact: true })).toBeDisabled();
+async function expectNoDelivery(popup: Page, ready = false) {
+  await expect(popup.getByRole("button", { name: "复制纯文本", exact: true })).toBeEnabled({
+    enabled: ready,
+  });
+  await expect(popup.getByRole("button", { name: "导出 Markdown", exact: true })).toBeEnabled({
+    enabled: ready,
+  });
   expect((await observations(popup)).deliveries).toEqual([]);
 }
 
@@ -274,7 +294,7 @@ test("thinking preambles never leave the page or create a visible fork", async (
   });
   await expect(popup.locator("#status")).toContainText("已读取 2 条消息");
   expect(JSON.stringify((await observations(popup)).injections)).not.toContain(privateSentinel);
-  await expectNoDelivery(popup);
+  await expectNoDelivery(popup, true);
 });
 
 for (const text of ["有正文和附件", ""]) {
@@ -299,7 +319,7 @@ for (const text of ["有正文和附件", ""]) {
     const conversation = normalizeConversation(result.capture);
     expect(conversation.messages[0]?.body).toBe(`${text}\n[附件未包含在导出中]\n`);
     expect(conversation.warnings).toEqual(["含图片/附件/音频，仅保留文字和占位说明"]);
-    await expectNoDelivery(popup);
+    await expectNoDelivery(popup, true);
   });
 }
 
@@ -327,9 +347,7 @@ for (const modernIds of [false, true]) {
     extension,
   }) => {
     const result = await openScenario(extension, { modernIds });
-    await expect(result.popup.getByRole("status")).toHaveText(
-      "已读取 2 条消息 · 复制和导出将在下一步接入",
-    );
+    await expect(result.popup.getByRole("status")).toHaveText("ChatGPT · 已读取 2 条消息");
     const observed = await observations(result.popup);
     expect(observed.injections.map((call) => call.args)).toEqual([
       [conversationId, "capture"],
@@ -359,11 +377,14 @@ for (const modernIds of [false, true]) {
     ]);
     expect(result.unexpectedRequests).toEqual([]);
     expect(result.errors).toEqual([]);
-    await expectNoDelivery(result.popup);
+    await expectNoDelivery(result.popup, true);
   });
 }
 
 for (const scenario of [
+  { name: "unauthorized response", options: { status: 401 }, code: "READ_FAILED" },
+  { name: "forbidden response", options: { status: 403 }, code: "READ_FAILED" },
+  { name: "missing conversation", options: { status: 404 }, code: "READ_FAILED" },
   { name: "rate limit", options: { status: 429 }, code: "RATE_LIMITED" },
   { name: "HTML login response", options: { htmlResponse: true }, code: "READ_FAILED" },
 ] satisfies { name: string; options: Scenario; code: string }[]) {
@@ -426,9 +447,7 @@ test("production capture discards a response after the page changes route", asyn
 
 test("production capture accepts a single chain without DOM message IDs", async ({ extension }) => {
   const result = await openScenario(extension, { noMessageIds: true });
-  await expect(result.popup.getByRole("status")).toHaveText(
-    "已读取 2 条消息 · 复制和导出将在下一步接入",
-  );
+  await expect(result.popup.getByRole("status")).toHaveText("ChatGPT · 已读取 2 条消息");
   const observed = await observations(result.popup);
   expect(observed.injections.map((call) => call.args[1])).toEqual(["capture", "probe"]);
   expect(observed.injections[0]?.results).toMatchObject([
@@ -436,7 +455,7 @@ test("production capture accepts a single chain without DOM message IDs", async 
   ]);
   expect(result.apiRequests).toHaveLength(2);
   expect(result.unexpectedRequests).toEqual([]);
-  await expectNoDelivery(result.popup);
+  await expectNoDelivery(result.popup, true);
 });
 
 test("production projection rejects a numeric parent instead of inventing a root", async ({
@@ -535,3 +554,213 @@ test("production capture rejects a projection above the sixteen MiB budget", asy
     .toEqual([{ ok: false, code: "TOO_LARGE" }]);
   await expectNoDelivery(result.popup);
 });
+
+function normalizedFixture(payload = conversationPayload()) {
+  return normalizeConversation({
+    payload,
+    probe: {
+      conversationId,
+      pathname: `/c/${conversationId}`,
+      visibleMessageIds: ["user-1", "assistant-1"],
+      generating: false,
+      signature: "synthetic",
+    },
+  });
+}
+
+async function ownDownload(page: Page, id: number) {
+  return page.evaluate(
+    async (ownId) =>
+      (await chrome.downloads.search({ id: ownId })).find((item) => item.id === ownId),
+    id,
+  );
+}
+async function downloadIds(page: Page): Promise<number[]> {
+  return page.evaluate(
+    () => (window as Window & { chatcarryTest?: BrowserObservations }).chatcarryTest!.downloadIds,
+  );
+}
+
+test("real clipboard and downloads preserve UTF-8 bytes and unique filenames", async ({
+  extension,
+}) => {
+  const { popup, unexpectedRequests, apiRequests } = await openScenario(extension, {
+    allowDelivery: true,
+  });
+  await expect(popup.locator("#copy-button")).toBeEnabled();
+  await extension.context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await popup.bringToFront();
+  await popup.getByRole("button", { name: "复制纯文本", exact: true }).click();
+  await expect(popup.getByRole("status")).toHaveText("纯文本已复制");
+  // Test-only clipboard readback; the production extension has no read permission/API.
+  expect(await popup.evaluate(() => navigator.clipboard.readText())).toBe(
+    renderText(normalizedFixture()),
+  );
+  await expect(popup.locator("#copy-button")).toBeFocused();
+  for (let count = 1; count <= 2; count++) {
+    await popup.getByRole("button", { name: "导出 Markdown", exact: true }).click();
+    await expect.poll(async () => (await downloadIds(popup)).length).toBe(count);
+    const id = (await downloadIds(popup)).at(-1)!;
+    await expect.poll(async () => (await ownDownload(popup, id))?.state).toBe("complete");
+    const item = (await ownDownload(popup, id))!;
+    expect(path.dirname(await realpath(item.filename))).toBe(
+      await realpath(extension.downloadsPath),
+    );
+    expect(await readFile(item.filename)).toEqual(
+      Buffer.from(renderMarkdown(normalizedFixture()), "utf8"),
+    );
+    await expect(popup.getByRole("status")).toHaveText("Markdown 已下载");
+  }
+  const names = await Promise.all(
+    (await downloadIds(popup)).map(async (id) => (await ownDownload(popup, id))!.filename),
+  );
+  expect(new Set(names).size).toBe(2);
+  expect(names.every((name) => name.endsWith(".md"))).toBe(true);
+  expect(apiRequests).toHaveLength(2);
+  expect(unexpectedRequests).toEqual([]);
+});
+
+test("math survives production clipboard conversion and Markdown download", async ({
+  extension,
+}) => {
+  const formula = String.raw`\(a*b + c_i\)`;
+  const matrix = String.raw`$$\begin{pmatrix}a & b \\ c & d\end{pmatrix}$$`;
+  const cell = String.raw`$\left|x\right|$`;
+  const source = `*before ${formula} after*\n\n${matrix}\n\n| A | B |\n| - | - |\n| ${cell} | x |`;
+  const { popup, unexpectedRequests, errors } = await openScenario(extension, {
+    allowDelivery: true,
+    changePayload: (payload) => {
+      payload.title = "公式验收 🧪";
+      payload.mapping["node-assistant"].message.content.parts = [source];
+    },
+  });
+  await expect(popup.locator("#copy-button")).toBeEnabled();
+  await extension.context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await popup.bringToFront();
+  await popup.getByRole("button", { name: "复制纯文本", exact: true }).click();
+  await expect(popup.getByRole("status")).toHaveText("纯文本已复制");
+  expect(await popup.evaluate(() => navigator.clipboard.readText())).toBe(
+    `公式验收 🧪\n\n你：\n合成用户消息\n\nChatGPT：\nbefore ${formula} after\n\n${matrix}\n\nA\tB\n${cell}\tx\n`,
+  );
+  await popup.getByRole("button", { name: "导出 Markdown", exact: true }).click();
+  await expect.poll(async () => (await downloadIds(popup)).length).toBe(1);
+  const id = (await downloadIds(popup))[0]!;
+  await expect.poll(async () => (await ownDownload(popup, id))?.state).toBe("complete");
+  const item = (await ownDownload(popup, id))!;
+  expect(path.dirname(await realpath(item.filename))).toBe(await realpath(extension.downloadsPath));
+  expect(await readFile(item.filename)).toEqual(
+    Buffer.from(`# 公式验收 🧪\n\n## 你\n\n合成用户消息\n\n## ChatGPT\n\n${source}\n`, "utf8"),
+  );
+  expect(unexpectedRequests).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("clipboard denial selects the same read-only text and never executes supplied HTML", async ({
+  extension,
+}) => {
+  const payload = conversationPayload();
+  payload.title = '<img src="https://unrequested.invalid" onerror="alert(1)">';
+  payload.mapping["node-user"].message.content.parts = ["字面 <script>alert(1)</script> 🧩"];
+  const { popup, unexpectedRequests, errors } = await openScenario(extension, {
+    allowDelivery: true,
+    denyClipboard: true,
+    changePayload: (current) => Object.assign(current, payload),
+  });
+  await expect(popup.locator("#copy-button")).toBeEnabled();
+  await popup.getByRole("button", { name: "复制纯文本", exact: true }).click();
+  const textarea = popup.locator("#manual-text");
+  await expect(textarea).toBeVisible();
+  await expect(textarea).toHaveValue(renderText(normalizedFixture(payload)));
+  await expect(textarea).toHaveAttribute("readonly", "");
+  await expect(textarea).toBeFocused();
+  expect(
+    await textarea.evaluate(
+      (element: HTMLTextAreaElement) => element.selectionEnd - element.selectionStart,
+    ),
+  ).toBe(renderText(normalizedFixture(payload)).length);
+  await expect(popup.locator("#export-button")).toBeEnabled();
+  await expect(popup.locator("#conversation-title")).toHaveText(payload.title);
+  expect(await popup.locator("#conversation-title img").count()).toBe(0);
+  expect(unexpectedRequests).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("click-time page changes reject delivery and offer an explicit reread", async ({
+  extension,
+}) => {
+  const { popup, chatPage } = await openScenario(extension, { allowDelivery: true });
+  await expect(popup.locator("#copy-button")).toBeEnabled();
+  await changeSameLengthText(chatPage);
+  await popup.getByRole("button", { name: "导出 Markdown", exact: true }).click();
+  await expect(popup.getByRole("status")).toHaveText("页面已变化，请重新读取对话");
+  await expectNoDelivery(popup);
+  await expect(popup.getByRole("button", { name: "重试", exact: true })).toBeVisible();
+});
+
+test("a submitted 4 MiB download survives closing the extension page", async ({ extension }) => {
+  const payload = conversationPayload();
+  const base = renderMarkdown(normalizedFixture(payload));
+  payload.mapping["node-user"].message.content.parts[0] += "x".repeat(
+    4 * 1024 * 1024 - Buffer.byteLength(base),
+  );
+  const expected = renderMarkdown(normalizedFixture(payload));
+  expect(Buffer.byteLength(expected)).toBe(4 * 1024 * 1024);
+  const { popup } = await openScenario(extension, {
+    allowDelivery: true,
+    changePayload: (current) => Object.assign(current, payload),
+  });
+  await expect(popup.locator("#export-button")).toBeEnabled();
+  // Delay only delivery of the real API result to the popup so it is closed
+  // after submission, before it can begin observing completion.
+  await popup.evaluate(() => {
+    const native = chrome.downloads.download.bind(chrome.downloads);
+    chrome.downloads.download = (async (options: chrome.downloads.DownloadOptions) => {
+      await native(options);
+      return new Promise<number>(() => {});
+    }) as typeof chrome.downloads.download;
+  });
+  await popup.getByRole("button", { name: "导出 Markdown", exact: true }).click();
+  await expect.poll(async () => (await downloadIds(popup)).length).toBe(1);
+  const id = (await downloadIds(popup))[0]!;
+  await popup.close();
+  const monitor = await extension.context.newPage();
+  await monitor.goto(extension.popupUrl);
+  await expect.poll(async () => (await ownDownload(monitor, id))?.state).toBe("complete");
+  const item = (await ownDownload(monitor, id))!;
+  expect(await readFile(item.filename)).toEqual(Buffer.from(expected, "utf8"));
+});
+
+for (const colorScheme of ["light", "dark"] as const) {
+  test(`usable popup keeps keyboard navigation and layout (${colorScheme})`, async ({
+    extension,
+  }, testInfo) => {
+    const longTitle = "合成中文长标题 🧩 ".repeat(20);
+    const { popup } = await openScenario(extension, {
+      allowDelivery: true,
+      denyClipboard: true,
+      changePayload(payload) {
+        payload.title = longTitle;
+        Object.assign(payload.mapping["node-user"].message.metadata, {
+          attachments: [{ id: "test-only-file", name: "fixture.pdf" }],
+        });
+      },
+    });
+    await popup.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+    await expect(popup.locator("#copy-button")).toBeEnabled();
+    await expect(popup.getByRole("button")).toHaveCount(2);
+    await expect(popup.locator("#conversation-title")).toHaveAttribute("title", longTitle);
+    await expect(popup.locator("#warning")).toHaveText("含图片/附件/音频，仅保留文字和占位说明");
+    expect(
+      await popup.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+    await popup.keyboard.press("Tab");
+    await expect(popup.locator("#copy-button")).toBeFocused();
+    await popup.keyboard.press("Tab");
+    await expect(popup.locator("#export-button")).toBeFocused();
+    await popup.keyboard.press("Shift+Tab");
+    await popup.keyboard.press("Space");
+    await expect(popup.locator("#manual-text")).toBeFocused();
+    await expect(popup.locator("#copy-button")).toHaveCSS("transition-duration", "0s");
+    await popup.screenshot({ path: testInfo.outputPath(`delivery-${colorScheme}.png`) });
+  });
+}

@@ -1,5 +1,5 @@
 import { createHash, generateKeyPairSync } from "node:crypto";
-import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +9,7 @@ import type { BrowserContext } from "@playwright/test";
 export interface ExtensionFixture {
   context: BrowserContext;
   popupUrl: string;
+  downloadsPath: string;
 }
 
 const productionDist = fileURLToPath(new URL("../../dist", import.meta.url));
@@ -18,6 +19,7 @@ export function extensionTests(hostPermissions: string[] = []) {
       expect(browserName).toBe("chromium");
       const temporaryRoot = await mkdtemp(path.join(tmpdir(), "chatcarry-foundation-"));
       const extensionPath = path.join(temporaryRoot, "dist-test");
+      const downloadsPath = path.join(temporaryRoot, "downloads");
       let context: BrowserContext | undefined;
 
       try {
@@ -58,17 +60,37 @@ export function extensionTests(hostPermissions: string[] = []) {
           originalManifest,
         );
 
-        context = await chromium.launchPersistentContext(path.join(temporaryRoot, "profile"), {
+        const profile = path.join(temporaryRoot, "profile");
+        await mkdir(path.join(profile, "Default"), { recursive: true });
+        await mkdir(downloadsPath, { recursive: true });
+        await writeFile(
+          path.join(profile, "Default", "Preferences"),
+          JSON.stringify({
+            download: { default_directory: downloadsPath, prompt_for_download: false },
+          }),
+        );
+        context = await chromium.launchPersistentContext(profile, {
           channel: "chromium",
           headless: true,
           serviceWorkers: "block",
+          downloadsPath,
           viewport: { width: 336, height: 640 },
           args: [
             `--disable-extensions-except=${extensionPath}`,
             `--load-extension=${extensionPath}`,
           ],
         });
-        await use({ context, popupUrl: `chrome-extension://${extensionId}/${popup}` });
+        const session = await context.newCDPSession(context.pages()[0]!);
+        await session.send("Browser.setDownloadBehavior", {
+          behavior: "allow",
+          downloadPath: downloadsPath,
+        });
+        await session.detach();
+        await use({
+          context,
+          popupUrl: `chrome-extension://${extensionId}/${popup}`,
+          downloadsPath,
+        });
       } finally {
         await context?.close();
         await rm(temporaryRoot, { recursive: true, force: true });

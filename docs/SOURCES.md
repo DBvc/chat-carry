@@ -6,15 +6,15 @@
 
 ## 版本基线
 
-| 工具                                         | 本次核实结果                                | 执行策略                                       |
-| -------------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
-| Vite                                         | 8.3.2，官方 Release 标记 Latest，2026-10-01 | bootstrap 再读 npm latest；写精确版本          |
-| TypeScript                                   | 7.0.2，npm latest；7.0 已正式发布           | 使用正式 typescript/tsc，不使用 native-preview |
-| Oxlint                                       | 1.86.0，2026-09-28 官方 Release             | 同时检查类型感知包兼容性                       |
-| Oxfmt                                        | 0.71.0，正式 latest 标签，版本仍为 0.x      | 锁定，不把 0.x 描述成 1.0 稳定 API             |
-| Node                                         | 24 LTS；26 当时为 Current                   | 选 LTS，而非为“最新”切 Current                 |
-| oxlint-tsgolint                              | v7 正式公告与 TypeScript 7.0.2 对齐         | 执行时检查实际版本/依赖/CLI                    |
-| pnpm / Vitest / Playwright / marked / @types | 本包不猜补丁版本                            | 执行时从 registry 解析、记录并锁定             |
+| 工具                                                  | 本次核实结果                                | 执行策略                                       |
+| ----------------------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
+| Vite                                                  | 8.3.2，官方 Release 标记 Latest，2026-10-01 | bootstrap 再读 npm latest；写精确版本          |
+| TypeScript                                            | 7.0.2，npm latest；7.0 已正式发布           | 使用正式 typescript/tsc，不使用 native-preview |
+| Oxlint                                                | 1.86.0，2026-09-28 官方 Release             | 同时检查类型感知包兼容性                       |
+| Oxfmt                                                 | 0.71.0，正式 latest 标签，版本仍为 0.x      | 锁定，不把 0.x 描述成 1.0 稳定 API             |
+| Node                                                  | 24 LTS；26 当时为 Current                   | 选 LTS，而非为“最新”切 Current                 |
+| oxlint-tsgolint                                       | v7 正式公告与 TypeScript 7.0.2 对齐         | 执行时检查实际版本/依赖/CLI                    |
+| pnpm / Vitest / Playwright / Markdown parser / @types | 本包不猜补丁版本                            | 执行时从 registry 解析、记录并锁定             |
 
 没有在本次无网络的容器里安装这些 npm 包；上述来自网页核实。不能把该表当成项目构建已通过的证据。
 
@@ -91,10 +91,11 @@ Chromium 历史测试包含 Downloads API 的 data URL 下载案例。本项目�
 
 ## S11 · Markdown token 与 Node
 
-- https://marked.js.org/using_pro
+- https://github.com/markdown-it/markdown-it/tree/15.0.2
+- https://markdown-it.github.io/markdown-it/
 - https://nodejs.org/en/about/previous-releases
 
-支持的事实：marked 提供 lexer/token 等扩展能力；Node24 当时仍为 LTS。纯文本输出的具体规则是本项目产品决定，不是 marked 的默认行为。
+支持的事实：markdown-it 提供块级、行内规则及 token；行内规则在强调标记配对前运行。本次修复固定 15.0.2，以单一解析器保留数学源文、识别引用清理时的代码边界。行内代码及表格的小包装复用该固定版本的原生规则，升级时须重跑兼容测试。纯文本输出和公式分隔符规则是本项目产品决定。Node24 在初始化时为 LTS。
 
 ## S12 · 内部会话数据：参考，不是契约
 

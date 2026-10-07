@@ -95,18 +95,18 @@
 
 工程初始化记录（2026-10-05）：本仓库已完成首次正式版本解析与锁定，见 `docs/toolchain-resolved.json`。现在的 bootstrap 只按现有锁文件恢复安装，不再承担首次版本选择；下文“初始化时核实”的要求已执行，后续主动升级时再次核实。
 
-| 用途           | 决定                                                    |
-| -------------- | ------------------------------------------------------- |
-| Node           | Node.js 24 LTS 最新补丁；执行时记录精确版本             |
-| 包管理         | pnpm 正式版，精确 packageManager 与 pnpm-lock.yaml      |
-| 构建           | Vite 最新正式版，初始化时核实并精确锁定                 |
-| 语言           | TypeScript 最新正式版；strict；初始化时核实兼容性       |
-| Lint           | Oxlint + 匹配的 oxlint-tsgolint，启用类型感知           |
-| Format         | Oxfmt 最新正式版，锁定并测试配置                        |
-| UI             | 原生 DOM + CSS；没有框架与组件库                        |
-| Markdown token | marked 一个运行时直接依赖，利用 lexer，不调用 HTML 渲染 |
-| 单测           | Vitest 正式版                                           |
-| 浏览器测试     | Playwright 正式版，Chromium persistent context          |
+| 用途           | 决定                                                           |
+| -------------- | -------------------------------------------------------------- |
+| Node           | Node.js 24 LTS 最新补丁；执行时记录精确版本                    |
+| 包管理         | pnpm 正式版，精确 packageManager 与 pnpm-lock.yaml             |
+| 构建           | Vite 最新正式版，初始化时核实并精确锁定                        |
+| 语言           | TypeScript 最新正式版；strict；初始化时核实兼容性              |
+| Lint           | Oxlint + 匹配的 oxlint-tsgolint，启用类型感知                  |
+| Format         | Oxfmt 最新正式版，锁定并测试配置                               |
+| UI             | 原生 DOM + CSS；没有框架与组件库                               |
+| Markdown token | markdown-it 一个运行时直接依赖，只读取 token，不调用 HTML 渲染 |
+| 单测           | Vitest 正式版                                                  |
+| 浏览器测试     | Playwright 正式版，Chromium persistent context                 |
 
 执行 bootstrap 时确认 latest 标签不是预发行，解析到精确版本并安装。本轮不升级工具链；docs/versions-observed.json 只保留上一版记录，不代表本轮重新安装或核实。
 Oxc 的 lint 主体与 Vite 底层打包器是 Rust；TypeScript 7 和 tsgolint 相关核心是 Go。不要为追求“全 Rust”去替换成熟的 Markdown 解析器或测试工具。
@@ -283,7 +283,7 @@ ChatGPT normalize 从 current_node 追溯 parent，检查每个父节点存在�
 ### 5.2 纯文本
 
 `format: plain` 的消息原样输出，避免把原本输入的 `a_b`、`#`、`*` 或代码改掉；这也适用于未来 adapter 的纯文本助手回答。
-`format: markdown` 的消息使用 marked lexer 的结构化 token visitor 输出纯文本，不是正则全局删符号。ChatGPT 本期将用户文字标为 plain、助手 Markdown 标为 markdown：
+`format: markdown` 的消息使用 markdown-it 的结构化 token visitor 输出纯文本，不是正则全局删符号。为避免公式里的星号、反引号和反斜杠被当成 Markdown 排版，本轮修复将原 marked 解析器局部替换；归一化中的代码区识别复用同一解析器。ChatGPT 本期将用户文字标为 plain、助手 Markdown 标为 markdown：
 
 | 结构                      | 文本结果                                    |
 | ------------------------- | ------------------------------------------- |
@@ -300,7 +300,9 @@ ChatGPT normalize 从 current_node 追溯 parent，检查每个父节点存在�
 
 需要避免末尾多余空行，但不能清理代码段内部空白。精确样例见 tests/fixtures/expected-*。
 
-未知 marked token 是适配错误，应测试发现并处理，不能默认吞掉其正文。
+公式支持 `\(...\)`、`\[...\]`、`$...$`、`$$...$$`，整体保留分隔符与正文，不解析或排版 LaTeX。单 `$` 公式不跨行，排除相邻空白和金额式结尾。链接先确定标签与 URL 的范围；标签中的公式不能跨入 URL 或后续正文。代码内不解释公式。未配对的分隔符按普通 Markdown 文字处理。
+
+未知解析 token 是适配错误，应测试发现并处理，不能默认吞掉其正文。
 
 ## 6. 复制、下载与生命周期
 

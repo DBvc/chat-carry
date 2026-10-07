@@ -1,5 +1,4 @@
 export type ExportErrorCode =
-  | "NOT_IMPLEMENTED"
   | "UNSUPPORTED_PAGE"
   | "READ_FAILED"
   | "TIMEOUT"
@@ -65,4 +64,13 @@ export function assertExportable(conversation: Conversation): void {
   if (!conversation.messages.some((message) => message.body.trim().length > 0)) {
     throw new ExportError("EMPTY_CONVERSATION", "这段对话没有可导出的正文");
   }
+}
+
+export function assertOutput(text: string): void {
+  if (!text.trim()) throw new ExportError("EMPTY_CONVERSATION", "这段对话没有可导出的正文");
+  const bytes = new TextEncoder().encode(text);
+  if (bytes.byteLength > 4 * 1024 * 1024)
+    throw new ExportError("TOO_LARGE", "导出内容超过 4 MiB 上限，无法完整导出");
+  if (new TextDecoder("utf-8", { ignoreBOM: true }).decode(bytes) !== text)
+    throw new ExportError("INVALID_DATA", "正文包含无效字符，无法完整导出");
 }
