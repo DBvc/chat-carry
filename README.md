@@ -35,6 +35,10 @@ node tools/pnpm.mjs dev
 
 `check` 执行包结构与边界检查、格式、类型感知 lint、类型检查、全部单测、生产构建和浏览器用例。`package` 检查生产目录后生成 `release/chatcarry-0.1.0.zip`；ZIP 根目录直接包含 manifest，解压后也可本地加载。
 
+在 GitHub 的 **Actions → Validation → Run workflow** 选择 `main`，也可手动运行同一套检查和打包。成功后，在该次运行底部的 **Artifacts** 下载 `chatcarry-extension`，解开外层压缩包即可得到扩展 ZIP；本地安装需再解压扩展 ZIP，然后加载其中含 `manifest.json` 的目录。
+
+当前工作流只生成安装包，不上传商店或提交审核。首次上架须在商店后台创建条目并补齐资料；后续自动上传可使用官方 Chrome Web Store API v2，需另外配置 Google Cloud API 授权。商店图片和填写资料见 [商店文案](docs/store-draft.md)。
+
 可分别运行 `test`、`test:reading`、`test:foundation`、`test:foundation:e2e`、`test:e2e`。读取阶段保留的 `check:reading` 是检查子集，不能替代完整 `check`。
 
 浏览器用例使用临时 Chromium profile、下载目录和生产 JavaScript 的副本。测试只在临时 manifest 中增加公开 key 和合成页面权限；HTTP(S) 全部合成或阻止。仅替换当前标签页选择，真实 scripting、剪贴板、downloads API 与磁盘字节单独验证；事件竞态、取消与旧请求由单测补充。普通扩展 tab 的关闭测试不等于真实工具栏 popup 的所有生命周期行为。
