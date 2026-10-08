@@ -191,7 +191,7 @@ async function openScenario(extension: ExtensionFixture, scenario: Scenario = {}
   const apiRequests: string[] = [];
   const unexpectedRequests: string[] = [];
   const errors: string[] = [];
-  let conversationRequestAt = 0;
+  let readRequestAt = 0;
   const chatPage = await extension.context.newPage();
   await extension.context.route(/^https?:\/\//, async (route) => {
     const request = route.request();
@@ -204,14 +204,16 @@ async function openScenario(extension: ExtensionFixture, scenario: Scenario = {}
         body: '<main><div data-message-id="iframe-message">子框架消息</div></main>',
       });
     } else if (url.href === "https://chatgpt.com/api/auth/session") {
+      readRequestAt = Date.now();
       apiRequests.push(url.pathname);
       expect(request.method()).toBe("GET");
+      // The twelve-second budget covers authentication and conversation fetch together.
+      if (scenario.stallConversation) await new Promise((resolve) => setTimeout(resolve, 3_000));
       await route.fulfill({
         json: { accessToken: token, user: { email: privateSentinel }, private: privateSentinel },
       });
     } else if (url.href === `https://chatgpt.com/backend-api/conversation/${conversationId}`) {
       apiRequests.push(url.pathname);
-      conversationRequestAt = Date.now();
       expect(request.method()).toBe("GET");
       expect(request.headers().authorization).toBe(`Bearer ${token}`);
       await scenario.beforeConversationReply?.(chatPage);
@@ -260,7 +262,7 @@ async function openScenario(extension: ExtensionFixture, scenario: Scenario = {}
     apiRequests,
     unexpectedRequests,
     errors,
-    conversationRequestAt: () => conversationRequestAt,
+    readRequestAt: () => readRequestAt,
   };
 }
 
@@ -535,7 +537,7 @@ test("production capture aborts an unfinished conversation fetch after twelve se
       intervals: [100, 250],
     })
     .toEqual([{ ok: false, code: "TIMEOUT" }]);
-  const elapsed = Date.now() - result.conversationRequestAt();
+  const elapsed = Date.now() - result.readRequestAt();
   expect(elapsed).toBeGreaterThanOrEqual(11_000);
   expect(elapsed).toBeLessThan(14_500);
   await expect(result.popup.getByRole("status")).toHaveText("读取超时，请重新打开扩展重试");
